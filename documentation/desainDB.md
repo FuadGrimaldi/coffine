@@ -13,6 +13,7 @@ erDiagram
         VARCHAR name "Not Null"
         VARCHAR email "Unique, Not Null"
         VARCHAR password "Not Null"
+        ENUM role "Admin, User Not Null"
         TEXT address
         VARCHAR phone
         TIMESTAMP created_at "Default: CURRENT_TIMESTAMP"
