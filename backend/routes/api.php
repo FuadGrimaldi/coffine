@@ -25,11 +25,7 @@ Route::post('/login', LoginController::class);
 
 Route::middleware('auth:sanctum')->group(function () {
     // Protected routes go here
-    Route::resource('user', UserControllerRev::class);
     Route::get('/profile', [UserControllerRev::class, 'getProfile']);
+    Route::Resource('/users', UserControllerRev::class);
 });
-
-
-
-
-
+// Route::apiResource('/users', UserControllerRev::class)->middleware('auth:sanctum');
