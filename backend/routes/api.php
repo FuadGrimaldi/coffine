@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\Auth\LoginController;
-use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\UserControllerRev;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -22,7 +22,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/register', RegisterController::class);
 Route::post('/login', LoginController::class);
-Route::get('/profile', [UserController::class, 'getProfile'])->middleware('auth:sanctum');
+
+Route::middleware('auth:sanctum')->group(function () {
+    // Protected routes go here
+    Route::resource('user', UserControllerRev::class);
+    Route::get('/profile', [UserControllerRev::class, 'getProfile']);
+});
+
+
 
 
 
