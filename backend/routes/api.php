@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\UserControllerRev;
 use App\Http\Controllers\Api\CategoriesController;
+use App\Http\Controllers\Api\ProductController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -27,7 +28,7 @@ Route::post('/login', LoginController::class);
 Route::middleware('auth:sanctum')->group(function () {
     // Protected routes go here
     Route::get('/profile', [UserControllerRev::class, 'getProfile']);
-
     Route::Resource('/users', UserControllerRev::class);
     Route::Resource('/categories', CategoriesController::class);
+    Route::Resource('/products', ProductController::class);
 });
