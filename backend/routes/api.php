@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\UserControllerRev;
+use App\Http\Controllers\Api\CategoriesController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -26,6 +27,7 @@ Route::post('/login', LoginController::class);
 Route::middleware('auth:sanctum')->group(function () {
     // Protected routes go here
     Route::get('/profile', [UserControllerRev::class, 'getProfile']);
+
     Route::Resource('/users', UserControllerRev::class);
+    Route::Resource('/categories', CategoriesController::class);
 });
-// Route::apiResource('/users', UserControllerRev::class)->middleware('auth:sanctum');
