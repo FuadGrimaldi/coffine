@@ -16,6 +16,7 @@ class CategoriesController extends Controller
     public function index()
     {
         try {
+            
             $user = auth()->user();
             if (!$user || $user->role !== 'admin') {
                 return ResponseCostum::error(null, 'Unauthorized. Admin access required.', 403);
