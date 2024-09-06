@@ -24,7 +24,7 @@ class UserControllerRev extends Controller
             }
 
             // Return the user's profile data
-            return ResponseCostum::success(new UserResource($user), 'User profile retrieved successfully');
+            return ResponseCostum::success(new UserResource($user), 'User profile retrieved successfully', 200);
 
         } catch (\Exception $e) {
             // Log the error
@@ -46,7 +46,7 @@ class UserControllerRev extends Controller
             if (!$user || $user->role !== 'admin') {
                 return ResponseCostum::error(null, 'Unauthorized. Admin access required.', 403);
             }
-            return ResponseCostum::success(UserResource::collection(User::all()), 'All users retrieved successfully');
+            return ResponseCostum::success(UserResource::collection(User::all()), 'All users retrieved successfully', 200);
         } catch (\Exception $e) {
             Log::channel('daily')->error('Error in index: ' . $e->getMessage(), [
                 'exception' => $e,
@@ -77,7 +77,7 @@ class UserControllerRev extends Controller
             $user = User::create($request->all());
 
             // Return the form for creating a new user
-            return ResponseCostum::success(new UserResource($user), 'User created successfully');
+            return ResponseCostum::success(new UserResource($user), 'User created successfully', 201);   
         } catch (\Exception $e) {
             Log::channel('daily')->error('Error in create: ' . $e->getMessage(), [
                 'exception' => $e,
@@ -97,7 +97,7 @@ class UserControllerRev extends Controller
             if (!$user) {
                 return ResponseCostum::error(null, 'User not found', 404);
             }
-            return ResponseCostum::success(new UserResource($user), 'User retrieved successfully');
+            return ResponseCostum::success(new UserResource($user), 'User retrieved successfully', 200);
         } catch (\Exception $e) {
             Log::channel('daily')->error('Error in show: ' . $e->getMessage(), [
                 'exception' => $e,
@@ -127,7 +127,7 @@ class UserControllerRev extends Controller
                 return ResponseCostum::error(null, 'User not found', 404);
             }
             $user->update($data);
-            return ResponseCostum::success(new UserResource($user), 'User updated successfully');
+            return ResponseCostum::success(new UserResource($user), 'User updated successfully', 200);
         } catch (\Exception $e) {
             Log::channel('daily')->error('Error in update: ' . $e->getMessage(), [
                 'exception' => $e,
@@ -148,7 +148,7 @@ class UserControllerRev extends Controller
                 return ResponseCostum::error(null, 'User not found', 404);
             }
             $user->delete();
-            return ResponseCostum::success(null, 'User deleted successfully');
+            return ResponseCostum::success(null, 'User deleted successfully', 204);
         } catch (\Exception $e) {
             Log::channel('daily')->error('Error in destroy: ' . $e->getMessage(), [
                 'exception' => $e,
