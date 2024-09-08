@@ -8,6 +8,8 @@ use App\Http\Controllers\Api\UserControllerRev;
 use App\Http\Controllers\Api\CategoriesController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ProductDetailController;
+use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\CartController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -28,9 +30,16 @@ Route::post('/login', LoginController::class);
 
 Route::middleware('auth:sanctum')->group(function () {
     // Protected routes go here
-    Route::get('/profile', [UserControllerRev::class, 'getProfile']);
+    Route::get('/user/profile', [UserControllerRev::class, 'getProfile']);
+    Route::get('/user/orders', [OrderController::class, 'getOrderByUser']);
+    Route::get('/user/cart', [CartController::class, 'getCart']);
+    Route::post('/user/cart', [CartController::class, 'addToCart']);
+    Route::delete('/user/cart/{id}', [CartController::class, 'removeFromCart']);
+    Route::post('/user/order', [OrderController::class, 'createOrder']);
     Route::Resource('/users', UserControllerRev::class);
     Route::Resource('/categories', CategoriesController::class);
     Route::Resource('/products', ProductController::class);
     Route::Resource('/product-detail', ProductDetailController::class);
+    Route::Resource('/orders', OrderController::class);
+    Route::Resource('/carts', CartController::class);
 });
