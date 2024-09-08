@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\UserControllerRev;
 use App\Http\Controllers\Api\CategoriesController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\ProductDetailController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -31,4 +32,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::Resource('/users', UserControllerRev::class);
     Route::Resource('/categories', CategoriesController::class);
     Route::Resource('/products', ProductController::class);
+    Route::Resource('/product-detail', ProductDetailController::class);
 });

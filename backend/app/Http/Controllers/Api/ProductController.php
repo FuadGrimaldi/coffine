@@ -97,7 +97,7 @@ class ProductController extends Controller
                 return ResponseCostum::error(null, 'Product not found', 404);
             }
             $product->delete();
-            return ResponseCostum::success(null, 'Product deleted successfully', 200);
+            return ResponseCostum::success(null, 'Product deleted successfully', 204);
         } catch (\Exception $e) {
             return ResponseCostum::error(null, 'An error occurred: ' . $e->getMessage(), 500);
         }
