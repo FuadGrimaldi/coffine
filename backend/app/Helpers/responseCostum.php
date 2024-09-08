@@ -14,7 +14,7 @@ class ResponseCostum
      */
     protected static $response = [
         'meta' => [
-            'code' => 200,
+            'code' => null,
             'status' => 'success',
             'message' => null,
         ],
@@ -24,8 +24,9 @@ class ResponseCostum
     /**
      * Give success response.
      */
-    public static function success($data = null, $message = null)
+    public static function success($data = null, $message = null, $code = null)
     {
+        self::$response['meta']['code'] = $code;
         self::$response['meta']['message'] = $message;
         self::$response['data'] = $data;
 
