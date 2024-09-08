@@ -10,6 +10,11 @@ class ProductDetail extends Model
     use HasFactory;
     protected $table = 'product_details';
     protected $fillable = ['product_id', 'category_id', 'price', 'image'];
+    
+    public function cart()
+    {
+        return $this->hasMany(Cart::class, 'product_id', 'id');
+    }
 
     public function product()
     {
