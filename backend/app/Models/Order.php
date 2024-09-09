@@ -12,6 +12,11 @@ class Order extends Model
     protected $table = 'orders';
     protected $fillable = ['user_id', 'qty', 'total_amount', 'order_date', 'status'];
 
+    public function payment()
+    {
+        return $this->hasOne(Payment::class);
+    }
+
     public function orderItems()
     {
         return $this->hasMany(OrderItem::class);
