@@ -8,72 +8,123 @@ This database contains comprehensive information about coffee, including details
 
 ```mermaid
 erDiagram
-    USERS {
-        INT id PK "Auto Increment"
-        VARCHAR name "User's full name"
-        VARCHAR email "Unique email address"
-        VARCHAR password "User password (hashed)"
-        VARCHAR address "User's address"
-        VARCHAR phone_number "User's phone number"
-        DATETIME created_at "Default: CURRENT_TIMESTAMP"
-        DATETIME updated_at "Default: CURRENT_TIMESTAMP"
+    users {
+        int id PK
+        string name
+        string email
+        string address
+        string phone
+        datetime email_verified_at
+        string password
+        string token
+        string role
+        string remember_token
+        datetime created_at
+        datetime updated_at
     }
 
-    ORDERS {
-        INT id PK "Auto Increment"
-        INT user_id FK "References USERS.id"
-        DATETIME order_date "Default: CURRENT_TIMESTAMP"
-        ENUM status "Order status: 'pending', 'processing', 'completed', 'cancelled'"
-        DECIMAL total_amount "Total amount of the order"
-        DATETIME created_at "Default: CURRENT_TIMESTAMP"
-        DATETIME updated_at "Default: CURRENT_TIMESTAMP"
+    categories {
+        int id PK
+        string name
+        datetime created_at
+        datetime updated_at
     }
 
-    ORDER_ITEMS {
-        INT id PK "Auto Increment"
-        INT order_id FK "References ORDERS.id"
-        INT product_id FK "References PRODUCTS.id"
-        INT quantity "Quantity of the product ordered"
-        DECIMAL price "Price of a single product at the time of the order"
-        DATETIME created_at "Default: CURRENT_TIMESTAMP"
-        DATETIME updated_at "Default: CURRENT_TIMESTAMP"
+    products {
+        int id PK
+        string name
+        int stock
+        string description
+        datetime created_at
+        datetime updated_at
     }
 
-    PRODUCTS {
-        INT id PK "Auto Increment"
-        VARCHAR name "Name of the product"
-        DECIMAL price "Price of the product"
-        INT stock "Available stock for the product"
-        TEXT description "Description of the product"
-        INT category_id FK "References CATEGORIES.id"
-        DATETIME created_at "Default: CURRENT_TIMESTAMP"
-        DATETIME updated_at "Default: CURRENT_TIMESTAMP"
+    product_details {
+        int id PK
+        int product_id FK
+        int category_id FK
+        decimal price
+        string image
+        datetime created_at
+        datetime updated_at
     }
 
-    CATEGORIES {
-        INT id PK "Auto Increment"
-        VARCHAR name "Name of the category"
-        DATETIME created_at "Default: CURRENT_TIMESTAMP"
-        DATETIME updated_at "Default: CURRENT_TIMESTAMP"
+    cart {
+        int id PK
+        int user_id FK
+        int product_id FK
+        int qty
+        decimal total_amount
+        datetime created_at
+        datetime updated_at
     }
 
-    PAYMENTS {
-        INT id PK "Auto Increment"
-        INT order_id FK "References ORDERS.id"
-        ENUM payment_method "Payment method: 'BCA', 'Mandiri', 'QRIS', 'PayPal', 'Cash'"
-        DECIMAL amount "Amount paid"
-        DATETIME payment_date "Default: CURRENT_TIMESTAMP"
-        ENUM status "Payment status: 'successful', 'pending', 'failed'"
-        VARCHAR transaction_code "Unique transaction code"
-        DATETIME created_at "Default: CURRENT_TIMESTAMP"
-        DATETIME updated_at "Default: CURRENT_TIMESTAMP"
+    orders {
+        int id PK
+        int user_id FK
+        datetime order_date
+        string status
+        decimal total_amount
+        int qty
+        datetime created_at
+        datetime updated_at
     }
 
-    USERS ||--o{ ORDERS : "places"
-    ORDERS ||--o{ ORDER_ITEMS : "contains"
-    PRODUCTS ||--o{ ORDER_ITEMS : "includes"
-    ORDERS ||--o{ PAYMENTS : "has"
-    PRODUCTS ||--o{ CATEGORIES : "classified_as"
-    CATEGORIES ||--o{ PRODUCTS : "contains"
+    order_items {
+        int id PK
+        int order_id FK
+        int product_id FK
+        int quantity
+        decimal price
+        datetime created_at
+        datetime updated_at
+    }
+
+    payments {
+        int id PK
+        int order_id FK
+        string payment_method
+        decimal amount
+        datetime payment_date
+        string status
+        string transaction_code
+        datetime created_at
+        datetime updated_at
+    }
+
+    personal_access_tokens {
+        int id PK
+        string tokenable_type
+        int tokenable_id
+        string name
+        string token
+        string abilities
+        datetime last_used_at
+        datetime expires_at
+        datetime created_at
+        datetime updated_at
+    }
+
+    %% Relationships
+    users ||--o{ orders : has
+    users ||--o{ cart : has
+    users ||--o{ personal_access_tokens : has
+
+    orders ||--o{ order_items : contains
+    orders ||--o{ payments : has
+
+    categories ||--o{ product_details : contains
+    products ||--o{ product_details : has
+
+    cart ||--|| users : belongs_to
+    cart ||--|| products : contains
+
+    order_items ||--|| orders : belongs_to
+    order_items ||--|| products : contains
+
+    payments ||--|| orders : belongs_to
+
+    product_details ||--|| categories : belongs_to
+    product_details ||--|| products : belongs_to
 
 ```
