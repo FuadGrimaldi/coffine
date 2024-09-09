@@ -1,47 +1,49 @@
-### 1. **User Registration**
+# API Documentation
 
-- **Endpoint:** `/api/auth/register`
-- **Method:** `POST`
-- **Description:** Register a new user.
+This document provides an overview of the available API endpoints for the E-Commerce project. For detailed information on each endpoint, including request/response schemas and examples, please refer to the corresponding OpenAPI/Swagger JSON files in the `documentation/docs api/` directory.
 
-- **Request Body:**
+## Authentication
 
-### 2. **User Login**
+- **Register**: [POST /api/register](docs%20api/auth.json)
+- **Login**: [POST /api/login](docs%20api/auth.json)
 
-- **Endpoint:** `/api/auth/login`
-- **Method:** `POST`
-- **Description:** Authenticate user and generate a token.
+## User Management
 
-- **Request Body:**
+- **Get User Profile**: [GET /api/user/profile](docs%20api/user.json)
+- **Update User Profile**: [PUT /api/user/profile](docs%20api/user.json)
 
-### 3. **Get All Products**
+## Product Management
 
-- **Endpoint:** `/api/products`
-- **Method:** `GET`
-- **Description:** Retrieve a list of all products.
+- **Get All Products**: [GET /api/products](docs%20api/products.json)
+- **Get Product by ID**: [GET /api/products/{id}](docs%20api/products.json)
+- **Create Product**: [POST /api/products](docs%20api/products.json)
+- **Update Product**: [PUT /api/products/{id}](docs%20api/products.json)
+- **Delete Product**: [DELETE /api/products/{id}](docs%20api/products.json)
 
-- **Request Body:** None
+## Category Management
 
-### 3. **Get All Products**
+- **Get All Categories**: [GET /api/categories](docs%20api/categories.json)
+- **Get Category by ID**: [GET /api/categories/{id}](docs%20api/categories.json)
+- **Create Category**: [POST /api/categories](docs%20api/categories.json)
+- **Update Category**: [PUT /api/categories/{id}](docs%20api/categories.json)
+- **Delete Category**: [DELETE /api/categories/{id}](docs%20api/categories.json)
 
-- **Endpoint:** `/api/products`
-- **Method:** `GET`
-- **Description:** Retrieve a list of all products.
+## Cart Management
 
-- **Request Body:** None
+- **Get User Cart**: [GET /api/user/cart](docs%20api/cart.json)
+- **Add to Cart**: [POST /api/user/cart](docs%20api/cart.json)
+- **Update Cart Item**: [PUT /api/user/cart/{id}](docs%20api/cart.json)
+- **Remove from Cart**: [DELETE /api/user/cart/{id}](docs%20api/cart.json)
 
-### 4. **Get Product by ID**
+## Order Management
 
-- **Endpoint:** `/api/products/:id`
-- **Method:** `GET`
-- **Description:** Retrieve a product by its ID.
+- **Get User Orders**: [GET /api/user/orders](docs%20api/orders.json)
+- **Create Order**: [POST /api/user/order](docs%20api/orders.json)
+- **Get Order Details**: [GET /api/user/orders/{id}](docs%20api/orders.json)
 
-- **Request Body:** None
+## Payment Management
 
-### 5. **Create a Product**
+- **Get Payment History**: [GET /api/user/history-payments](docs%20api/payments.json)
+- **Process Payment**: [POST /api/payments](docs%20api/payments.json)
 
-- **Endpoint:** `/api/products/:id`
-- **Method:** `POST`
-- **Description:** Create a new product.
-
-- **Request Body:**
+For more detailed information on request/response schemas, authentication requirements, and example usage, please refer to the individual OpenAPI/Swagger JSON files linked above.

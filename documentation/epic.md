@@ -1,55 +1,57 @@
-## Epic: Coffee Sales System Implementation
+## Epic: E-Commerce API Implementation
 
 ### Description
 
-Build and implement a web-based coffee sales system that includes user management, product management, ordering, payment, and transaction features. The system should allow users to create an account, order coffee products, make payments, and manage transaction and product data.
+Develop and implement a robust E-Commerce API using Laravel that includes user management, product management, cart functionality, order processing, and payment handling. The system should allow users to register, browse products, manage their cart, place orders, and process payments.
 
 ### Main Tasks (User Stories)
 
 1. **User Account Management**
 
-   - As a **user**, I want to be able to create a new account by providing personal information such as name, email, password, address, and phone number.
+   - As a **user**, I want to be able to register a new account by providing my name, email, password, address, and phone number.
    - As a **user**, I want to be able to log in to the system using my email and password.
-   - As a **user**, I want to be able to update my account information, including my address and phone number.
+   - As a **user**, I want to be able to view and update my profile information.
 
 2. **Product Management**
 
-   - As an **admin**, I want to be able to add new products with a name, price, stock, and description.
-   - As an **admin**, I want to be able to update existing product information, such as stock or price.
-   - As an **admin**, I want to delete products that are no longer available.
-   - As a **user**, I want to view a list of all available products, including product details and categories.
+   - As an **admin**, I want to be able to add new products with details such as name, stock, description, price, and image.
+   - As an **admin**, I want to be able to update existing product information.
+   - As an **admin**, I want to be able to delete products.
+   - As a **user**, I want to view a list of all available products, including their details and categories.
 
-3. **Product Category Management**
+3. **Category Management**
 
    - As an **admin**, I want to be able to create new categories to organize products.
-   - As an **admin**, I want to be able to link products to the appropriate categories.
    - As an **admin**, I want to be able to update or delete product categories.
+   - As a **user**, I want to browse products by category.
 
-4. **Order Processing**
+4. **Cart Functionality**
 
-   - As a **user**, I want to be able to add products to my shopping cart.
-   - As a **user**, I want to be able to view and edit my shopping cart before placing an order.
-   - As a **user**, I want to be able to complete an order by filling in payment details and a shipping address.
+   - As a **user**, I want to be able to add products to my cart.
+   - As a **user**, I want to be able to view and edit my cart contents.
+   - As a **user**, I want to be able to remove items from my cart.
 
-5. **Payment Management**
+5. **Order Processing**
 
-   - As a **user**, I want to be able to choose different payment methods when placing an order.
-   - As an **admin**, I want to view the payment history and payment status of all orders.
-   - As an **admin**, I want to update the payment status if there is an error or if the payment is received manually.
+   - As a **user**, I want to be able to place an order with the items in my cart.
+   - As a **user**, I want to be able to view my order history.
+   - As an **admin**, I want to be able to view and manage all orders.
 
-6. **Transaction Management**
+6. **Payment Handling**
 
-   - As an **admin**, I want to be able to track all transactions made by users, including payment amounts and transaction status.
-   - As an **admin**, I want to view transaction details, including transaction ID, transaction code, and the involved users.
-   - As an **admin**, I want to update the transaction status if needed, such as marking a transaction as successful or failed.
+   - As a **user**, I want to be able to process payments for my orders.
+   - As a **user**, I want to be able to view my payment history.
+   - As an **admin**, I want to be able to view and manage all payments.
 
-7. **Reporting and Analytics**
-   - As an **admin**, I want to view product sales reports based on categories and specific time periods.
-   - As an **admin**, I want to access transaction reports for auditing and financial analysis.
-   - As an **admin**, I want reports on product performance, such as best-selling products and products with low stock.
+7. **API Documentation**
+   - As a **developer**, I want access to comprehensive API documentation to integrate with the system.
+   - As an **admin**, I want the API documentation to be up-to-date with all available endpoints.
 
 ### Completion Criteria
 
-- The system must include all the features outlined in the main tasks above.
-- All data must be stored and managed according to the database schema that has been created.
-- Testing must be conducted to ensure each feature works correctly and meets user needs.
+- The API must include all the features outlined in the main tasks above.
+- All data must be stored and managed according to the database schema defined in the ERD.
+- Each API endpoint must be thoroughly tested to ensure correct functionality and appropriate error handling.
+- The API must be secured using Laravel Sanctum for token-based authentication.
+- Comprehensive API documentation must be provided using OpenAPI/Swagger specifications.
+- The system should follow the architectural layers outlined in the architecture document, including proper separation of concerns between controllers, services, and repositories.
