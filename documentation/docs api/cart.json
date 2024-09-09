@@ -1,0 +1,160 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Cart API",
+        "version": "1.0.0",
+        "description": "API documentation for cart management"
+    },
+    "paths": {
+        "/api/user/cart": {
+            "get": {
+                "summary": "Get user's cart",
+                "tags": ["Cart"],
+                "security": [{ "bearerAuth": [] }],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CartResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Add product to cart",
+                "tags": ["Cart"],
+                "security": [{ "bearerAuth": [] }],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AddToCartRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/CartItemResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            }
+        },
+        "/api/user/cart/{id}": {
+            "delete": {
+                "summary": "Remove product from cart",
+                "tags": ["Cart"],
+                "security": [{ "bearerAuth": [] }],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful response"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "CartResponse": {
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/CartItem"
+                        }
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "integer"
+                    }
+                }
+            },
+            "CartItem": {
+                "type": "object",
+                "properties": {
+                    "id": { "type": "integer" },
+                    "user": {
+                        "type": "object",
+                        "properties": {
+                            "name": { "type": "string" },
+                            "address": { "type": "string" },
+                            "phone": { "type": "string" }
+                        }
+                    },
+                    "product": {
+                        "type": "object",
+                        "properties": {
+                            "name": { "type": "string" },
+                            "stock": { "type": "integer" }
+                        }
+                    },
+                    "qty": { "type": "integer" },
+                    "total_amount": { "type": "number" }
+                }
+            },
+            "AddToCartRequest": {
+                "type": "object",
+                "required": ["product_id", "qty"],
+                "properties": {
+                    "product_id": { "type": "integer" },
+                    "qty": { "type": "integer", "minimum": 1 }
+                }
+            },
+            "CartItemResponse": {
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "$ref": "#/components/schemas/CartItem"
+                    },
+                    "message": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    }
+}

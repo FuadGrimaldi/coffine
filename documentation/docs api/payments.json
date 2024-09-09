@@ -1,0 +1,209 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Payments API",
+        "version": "1.0.0",
+        "description": "API documentation for payment-related endpoints"
+    },
+    "paths": {
+        "/api/user/history-payments": {
+            "get": {
+                "summary": "Get payment history for authenticated user",
+                "tags": ["Payments"],
+                "security": [{ "bearerAuth": [] }],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaymentResourceCollection"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            }
+        },
+        "/api/payments": {
+            "get": {
+                "summary": "Get all payments",
+                "tags": ["Payments"],
+                "security": [{ "bearerAuth": [] }],
+                "responses": {
+                    "200": {
+                        "description": "Successful response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaymentResourceCollection"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            },
+            "post": {
+                "summary": "Create a new payment",
+                "tags": ["Payments"],
+                "security": [{ "bearerAuth": [] }],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "order_id": {
+                                        "type": "integer",
+                                        "description": "ID of the order to be paid"
+                                    },
+                                    "payment_method": {
+                                        "type": "string",
+                                        "description": "Payment method used"
+                                    }
+                                },
+                                "required": ["order_id", "payment_method"]
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Payment processed successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaymentResource"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Payment processing failed"
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            }
+        },
+        "/api/payments/{id}": {
+            "delete": {
+                "summary": "Delete a payment",
+                "tags": ["Payments"],
+                "security": [{ "bearerAuth": [] }],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        },
+                        "description": "Payment ID"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Payment deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PaymentResource"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "PaymentResource": {
+                "type": "object",
+                "properties": {
+                    "id": { "type": "integer" },
+                    "transaction_code": { "type": "string" },
+                    "payment_method": { "type": "string" },
+                    "payment_date": { "type": "string", "format": "date-time" },
+                    "status_payment": { "type": "string" },
+                    "order": {
+                        "type": "object",
+                        "properties": {
+                            "id": { "type": "integer" },
+                            "user": {
+                                "type": "object",
+                                "properties": {
+                                    "id": { "type": "integer" },
+                                    "name": { "type": "string" },
+                                    "email": { "type": "string" }
+                                }
+                            },
+                            "qty": { "type": "integer" },
+                            "order_items": {
+                                "type": "array",
+                                "items": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": { "type": "integer" },
+                                        "product_detail": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": { "type": "integer" },
+                                                "product": {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer"
+                                                        },
+                                                        "name": {
+                                                            "type": "string"
+                                                        }
+                                                    }
+                                                },
+                                                "price": { "type": "number" }
+                                            }
+                                        },
+                                        "quantity": { "type": "integer" },
+                                        "amount": { "type": "number" }
+                                    }
+                                }
+                            },
+                            "status": { "type": "string" },
+                            "total_amount": { "type": "number" }
+                        }
+                    }
+                }
+            },
+            "PaymentResourceCollection": {
+                "type": "object",
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PaymentResource"
+                        }
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    }
+}
