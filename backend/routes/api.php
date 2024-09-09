@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\ProductDetailController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\CartController;
+use App\Http\Controllers\Api\PaymentController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -36,10 +37,12 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/user/cart', [CartController::class, 'addToCart']);
     Route::delete('/user/cart/{id}', [CartController::class, 'removeFromCart']);
     Route::post('/user/order', [OrderController::class, 'createOrder']);
+    Route::get('/user/history-payments', [PaymentController::class, 'getPaymentUser']);
     Route::Resource('/users', UserControllerRev::class);
     Route::Resource('/categories', CategoriesController::class);
     Route::Resource('/products', ProductController::class);
     Route::Resource('/product-detail', ProductDetailController::class);
     Route::Resource('/orders', OrderController::class);
     Route::Resource('/carts', CartController::class);
+    Route::Resource('/payments', PaymentController::class);
 });
