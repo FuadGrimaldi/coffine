@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fetch and Edit Product Data</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+      .container {
+        width: 50%;
+        margin: 50px auto;
+        text-align: center;
+      }
+      .product-details {
+        margin-top: 20px;
+      }
+      .button {
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+        margin: 5px;
+      }
+      .product-image {
+        max-width: 100%;
+        height: auto;
+      }
+      .info {
+        text-align: left;
+        margin: 20px 0;
+      }
+      form {
+        margin-top: 20px;
+        text-align: left;
+      }
+      form label {
+        display: block;
+        margin: 10px 0 5px;
+      }
+      form input,
+      form textarea {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Fetch and Edit Product Detail</h1>
+      <button class="button" onclick="fetchProductData()">
+        Get Product Data
+      </button>
+      <button class="button" onclick="clearLocalStorage()">
+        Clear Local Storage
+      </button>
+
+      <div id="product-detail" class="product-details">
+        <h2>Product Details</h2>
+        <div class="info">
+          <p><strong>Product Name:</strong> <span id="product-name"></span></p>
+          <p>
+            <strong>Description:</strong> <span id="product-description"></span>
+          </p>
+          <p><strong>Stock:</strong> <span id="product-stock"></span></p>
+          <p><strong>Category:</strong> <span id="product-category"></span></p>
+          <p><strong>Price:</strong> $<span id="product-price"></span></p>
+        </div>
+        <img
+          id="product-image"
+          src=""
+          alt="Product Image"
+          class="product-image"
+        />
+      </div>
+
+      <!-- Form Edit Product -->
+      <form id="edit-product-form">
+        <h3>Edit Product</h3>
+        <label for="edit-name">Product Name</label>
+        <input type="text" id="edit-name" name="name" required />
+
+        <label for="edit-description">Description</label>
+        <textarea id="edit-description" name="description" required></textarea>
+
+        <label for="edit-stock">Stock</label>
+        <input type="number" id="edit-stock" name="stock" required />
+
+        <label for="edit-category">Category</label>
+        <input type="text" id="edit-category" name="category" required />
+
+        <label for="edit-price">Price</label>
+        <input
+          type="number"
+          step="0.01"
+          id="edit-price"
+          name="price"
+          required
+        />
+
+        <button class="button" type="submit">Submit Changes</button>
+      </form>
+    </div>
+
+    <script>
+      const apiUrl = "http://127.0.0.1:8000/api/product-detail/11";
+
+      // Fungsi untuk mengambil data dari API dan menyimpannya di Local Storage
+      async function fetchProductData() {
+        try {
+          const response = await fetch(apiUrl);
+          const data = await response.json();
+          const product = data.data;
+
+          // Simpan data produk di Local Storage
+          localStorage.setItem("productData", JSON.stringify(product));
+
+          // Tampilkan data produk
+          displayProductData(product);
+          populateEditForm(product); // Isi form edit dengan data produk
+        } catch (error) {
+          console.error("Error fetching product data:", error);
+          document.getElementById(
+            "product-detail"
+          ).innerHTML = `<p>Error fetching data.</p>`;
+        }
+      }
+
+      // Fungsi untuk menampilkan data produk di halaman
+      function displayProductData(product) {
+        document.getElementById("product-name").textContent =
+          product.product.name;
+        document.getElementById("product-description").textContent =
+          product.product.description;
+        document.getElementById("product-stock").textContent =
+          product.product.stock;
+        document.getElementById("product-category").textContent =
+          product.category.name;
+        document.getElementById("product-price").textContent = product.price;
+        document.getElementById("product-image").src = product.image;
+      }
+
+      // Fungsi untuk mengisi form edit dengan data produk
+      function populateEditForm(product) {
+        document.getElementById("edit-name").value = product.product.name;
+        document.getElementById("edit-description").value =
+          product.product.description;
+        document.getElementById("edit-stock").value = product.product.stock;
+        document.getElementById("edit-category").value = product.category.name;
+        document.getElementById("edit-price").value = product.price;
+      }
+
+      // Fungsi untuk menghapus data dari Local Storage
+      function clearLocalStorage() {
+        localStorage.removeItem("productData");
+        document.getElementById("product-detail").innerHTML =
+          "<p>Product data cleared from Local Storage.</p>";
+      }
+
+      // Submit form untuk mengirim perubahan ke API
+      document
+        .getElementById("edit-product-form")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          // Ambil data dari form
+          const name = document.getElementById("edit-name").value;
+          const description = document.getElementById("edit-description").value;
+          const stock = document.getElementById("edit-stock").value;
+          const categoryId = document.getElementById("edit-category").value;
+          const price = document.getElementById("edit-price").value;
+          // Buat string URL-encoded
+          const urlEncodedData = new URLSearchParams({
+            name,
+            description,
+            stock,
+            category_id: categoryId,
+            price,
+          }).toString();
+          try {
+            const response = await fetch(apiUrl, {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+              },
+              body: urlEncodedData,
+            });
+
+            const result = await response.json();
+            console.log(result);
+
+            if (result.meta.status === "success") {
+              alert("Product updated successfully!");
+              fetchProductData(); // Fetch ulang untuk memperbarui data
+            } else {
+              alert("Failed to update product.");
+            }
+          } catch (error) {
+            console.error("Error updating product:", error);
+          }
+        });
+
+      // Periksa apakah ada data produk di Local Storage ketika halaman dimuat
+      window.onload = function () {
+        const storedProduct = localStorage.getItem("productData");
+        if (storedProduct) {
+          const product = JSON.parse(storedProduct);
+          displayProductData(product);
+          populateEditForm(product);
+        }
+      };
+    </script>
+  </body>
+</html>

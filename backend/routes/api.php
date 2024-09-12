@@ -28,6 +28,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::post('/register', RegisterController::class);
 Route::post('/login', LoginController::class);
+Route::Resource('/product-detail', ProductDetailController::class);
 
 Route::middleware('auth:sanctum')->group(function () {
     // Protected routes go here
@@ -41,7 +42,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::Resource('/users', UserControllerRev::class);
     Route::Resource('/categories', CategoriesController::class);
     Route::Resource('/products', ProductController::class);
-    Route::Resource('/product-detail', ProductDetailController::class);
     Route::Resource('/orders', OrderController::class);
     Route::Resource('/carts', CartController::class);
     Route::Resource('/payments', PaymentController::class);
