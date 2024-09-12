@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Http\Request;
 use App\Models\ProductDetail;
 use App\Models\Product;
@@ -41,12 +42,22 @@ class ProductDetailController extends Controller
     {
         try {
             $product = Product::create($request->validated());
+
+            // Pastikan ada file profile_image dalam request
+            if ($request->hasFile('categories_image')) {
+                // Upload gambar ke Cloudinary
+                $uploadedFileUrl = Cloudinary::upload($request->file('categories_image')->getRealPath())->getSecurePath();
+            } else {
+                // Jika file tidak diupload, set default atau return error
+                return ResponseCostum::error('Profile image is required', 'Product creation failed', 400);
+            }
+
             $productDetail = ProductDetail::create([
                 'product_id' => $product->id,
                 'category_id' => $request->category_id,
                 'price' => $request->price,
                 'stock' => $request->stock,
-                'image' => $request->file('image')->store('product-images', 'public'),
+                'image' => $uploadedFileUrl,
             ]);
             return ResponseCostum::success(ProductDetailResource::make($productDetail), 'Product created successfully', 201);
         } catch (\Throwable $th) {
@@ -81,6 +92,7 @@ class ProductDetailController extends Controller
     public function update(ProductDetailUpdateReq $request, string $id)
     {
         try {
+            // dd($request->validated());
             $productDetail = ProductDetail::find($id);
             if (!$productDetail) {
                 return ResponseCostum::error('Product not found', 'Product update failed', 404);
@@ -96,8 +108,18 @@ class ProductDetailController extends Controller
                 'stock' => $request->stock,
             ];
             
+            // Check if there's a new image
             if ($request->hasFile('image')) {
-                $updateData['image'] = $request->file('image')->store('product-images', 'public');
+                // Delete the old image from Cloudinary if it exists
+                if ($productDetail->image) {
+                    // Extract public ID from the old image URL
+                    $oldImagePublicId = basename(parse_url($productDetail->image, PHP_URL_PATH), '.' . pathinfo($productDetail->image, PATHINFO_EXTENSION));
+                    Cloudinary::destroy($oldImagePublicId);
+                }
+                
+                // Upload the new image to Cloudinary
+                $uploadedFileUrl = Cloudinary::upload($request->file('image')->getRealPath())->getSecurePath();
+                $updateData['image'] = $uploadedFileUrl;
             }
             
             $productDetail->update($updateData);

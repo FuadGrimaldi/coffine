@@ -24,11 +24,11 @@ class ProductDetailUpdateReq extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'nullable|string',
-            'description' => 'nullable|string',
-            'category_id' => 'nullable|integer',
-            'stock' => 'nullable|integer',
-            'price' => 'nullable|numeric',
+            'name' => 'required|string',
+            'description' => 'required|string',
+            'category_id' => 'required|integer',
+            'stock' => 'required|integer',
+            'price' => 'required|numeric',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
